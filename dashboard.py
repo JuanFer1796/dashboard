@@ -8,6 +8,7 @@ from prophet import Prophet
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 import seaborn as sns
 
+duda
 # Configuración de la página
 st.set_page_config(page_title="Dashboard de Control", layout="wide", initial_sidebar_state="expanded")
 
