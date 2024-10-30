@@ -78,35 +78,45 @@ if uploaded_file:
             
             # Cálculo de tendencias
             tendencia = calcular_tendencia(df['Cantidad'])
-            delta_color = "normal" if tendencia > 0 else "inverse"
+            delta_color = "normal" if tendencia < 0 else "inverse"
             
-          # En la sección de métricas principales, modifica las condiciones de delta_color
-        with col1:
-            st.metric(
-                "💰 Total Acumulado",
-                f"{total_cantidad:,.2f}",
-                f"Tendencia: {tendencia:+.2%}",
-                # Para tendencias, positivo es bueno
-                delta_color="normal" if tendencia < 0 else "inverse"
+            with col1:
+                st.metric(
+                    "💰 Total Acumulado",
+                    f"{total_cantidad:,.2f}",
+                    f"Tendencia: {tendencia:+.2%}",
+                    delta_color=delta_color
+                )
+            
+            with col2:
+                st.metric(
+                    "📊 Promedio Mensual",
+                    f"{promedio_mensual:,.2f}",
+                    f"vs Objetivo: {(promedio_mensual/df['Objetivo'].mean()-1):+.2%}",
+                    delta_color="normal" if promedio_mensual < df['Objetivo'].mean() else "inverse"
+                )
+            
+            with col3:
+                st.metric(
+                    "🎯 Progreso vs Objetivo",
+                    f"{progreso_objetivo:.1f}%",
+                    f"{progreso_objetivo-100:+.1f}% vs 100%",
+                    delta_color="normal" if progreso_objetivo <= 100 else "inverse"
+                )
+
+            # Gráfico de desempeño por categoría
+            st.subheader("📊 Desempeño por Categoría")
+            fig_cat = px.bar(
+                df.groupby('Categoría').agg({
+                    'Cantidad': 'sum',
+                    'Objetivo': 'sum'
+                }).reset_index(),
+                x='Categoría',
+                y=['Cantidad', 'Objetivo'],
+                barmode='group',
+                title="Cantidad vs Objetivo por Categoría"
             )
-        
-        with col2:
-            st.metric(
-                "📊 Promedio Mensual",
-                f"{promedio_mensual:,.2f}",
-                f"vs Objetivo: {(promedio_mensual / df['Objetivo'].mean() - 1):+.2%}",
-                # Para promedio vs objetivo, estar por encima del objetivo es bueno
-                delta_color="normal" if promedio_mensual < df['Objetivo'].mean() else "inverse"
-            )
-        
-        with col3:
-            st.metric(
-                "🎯 Progreso vs Objetivo",
-                f"{progreso_objetivo:.1f}%",
-                f"{progreso_objetivo - 100:+.1f}% vs 100%",
-                # Para progreso vs objetivo, estar por encima del 100% es bueno
-                delta_color="normal" if progreso_objetivo < 100 else "inverse"
-            )
+            st.plotly_chart(fig_cat, use_container_width=True)
 
         with tab2:
             st.subheader("📈 Análisis Temporal")
