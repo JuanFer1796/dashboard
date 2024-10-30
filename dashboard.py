@@ -80,30 +80,29 @@ if uploaded_file:
             tendencia = calcular_tendencia(df['Cantidad'])
             delta_color = "normal" if tendencia > 0 else "inverse"
             
-            with col1:
-                st.metric(
-                    "💰 Total Acumulado",
-                    f"{total_cantidad:,.2f}",
-                    f"Tendencia: {tendencia:+.2%}",
-                    delta_color=delta_color
-                )
-            
-            with col2:
-                st.metric(
-                    "📊 Promedio Mensual",
-                    f"{promedio_mensual:,.2f}",
-                    f"vs Objetivo: {(promedio_mensual/df['Objetivo'].mean()-1):+.2%}",
-                    delta_color="normal" if promedio_mensual > df['Objetivo'].mean() else "inverse"
-                )
-            
-            with col3:
-                st.metric(
-                    "🎯 Progreso vs Objetivo",
-                    f"{progreso_objetivo:.1f}%",
-                    f"{progreso_objetivo-100:+.1f}% vs 100%",
-                    delta_color="normal" if progreso_objetivo >= 100 else "inverse"
-                )
-
+          with col1:
+            st.metric(
+                "💰 Total Acumulado",
+                f"{total_cantidad:,.2f}",
+                f"Tendencia: {tendencia:+.2%}",
+                delta_color="normal" if tendencia >= 0 else "inverse"
+            )
+        
+        with col2:
+            st.metric(
+                "📊 Promedio Mensual",
+                f"{promedio_mensual:,.2f}",
+                f"vs Objetivo: {(promedio_mensual / df['Objetivo'].mean() - 1):+.2%}",
+                delta_color="normal" if promedio_mensual >= df['Objetivo'].mean() else "inverse"
+            )
+        
+        with col3:
+            st.metric(
+                "🎯 Progreso vs Objetivo",
+                f"{progreso_objetivo:.1f}%",
+                f"{progreso_objetivo - 100:+.1f}% vs 100%",
+                delta_color="normal" if progreso_objetivo >= 100 else "inverse"
+            )
             # Gráfico de desempeño por categoría
             st.subheader("📊 Desempeño por Categoría")
             fig_cat = px.bar(
