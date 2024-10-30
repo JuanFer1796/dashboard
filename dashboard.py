@@ -78,7 +78,7 @@ if uploaded_file:
             
             # Cálculo de tendencias
             tendencia = calcular_tendencia(df['Cantidad'])
-            delta_color = "normal" if tendencia > 0 else "inverse"
+            delta_color = "normal" if tendencia < 0 else "inverse"
             
             with col1:
                 st.metric(
@@ -93,7 +93,7 @@ if uploaded_file:
                     "📊 Promedio Mensual",
                     f"{promedio_mensual:,.2f}",
                     f"vs Objetivo: {(promedio_mensual/df['Objetivo'].mean()-1):+.2%}",
-                    delta_color="normal" if promedio_mensual > df['Objetivo'].mean() else "inverse"
+                    delta_color="normal" if promedio_mensual < df['Objetivo'].mean() else "inverse"
                 )
             
             with col3:
@@ -101,7 +101,7 @@ if uploaded_file:
                     "🎯 Progreso vs Objetivo",
                     f"{progreso_objetivo:.1f}%",
                     f"{progreso_objetivo-100:+.1f}% vs 100%",
-                    delta_color="normal" if progreso_objetivo >= 100 else "inverse"
+                    delta_color="normal" if progreso_objetivo <= 100 else "inverse"
                 )
 
             # Gráfico de desempeño por categoría
