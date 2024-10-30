@@ -8,7 +8,7 @@ from prophet import Prophet
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 import seaborn as sns
 
-duda
+
 # Configuración de la página
 st.set_page_config(page_title="Dashboard de Control", layout="wide", initial_sidebar_state="expanded")
 
@@ -88,7 +88,7 @@ if uploaded_file:
                 f"{total_cantidad:,.2f}",
                 f"Tendencia: {tendencia:+.2%}",
                 # Para tendencias, positivo es bueno
-                delta_color="normal" if tendencia > 0 else "inverse"
+                delta_color="normal" if tendencia < 0 else "inverse"
             )
         
         with col2:
@@ -97,7 +97,7 @@ if uploaded_file:
                 f"{promedio_mensual:,.2f}",
                 f"vs Objetivo: {(promedio_mensual / df['Objetivo'].mean() - 1):+.2%}",
                 # Para promedio vs objetivo, estar por encima del objetivo es bueno
-                delta_color="normal" if promedio_mensual > df['Objetivo'].mean() else "inverse"
+                delta_color="normal" if promedio_mensual < df['Objetivo'].mean() else "inverse"
             )
         
         with col3:
@@ -106,7 +106,7 @@ if uploaded_file:
                 f"{progreso_objetivo:.1f}%",
                 f"{progreso_objetivo - 100:+.1f}% vs 100%",
                 # Para progreso vs objetivo, estar por encima del 100% es bueno
-                delta_color="normal" if progreso_objetivo > 100 else "inverse"
+                delta_color="normal" if progreso_objetivo < 100 else "inverse"
             )
 
         with tab2:
